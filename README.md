@@ -1,59 +1,161 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel POS — TFA7
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Developer: Vance Uriele Parido  
+Course: IT0049 — Web System Technologies
 
-## About Laravel
+This project extends the TFA6 Laravel POS application with customer
+and user forms, validation, and user avatar uploads.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- View customer and user accounts.
+- Create and edit customers.
+- Validate customer names, email addresses, and phone numbers.
+- Create and edit users with unique usernames.
+- Show validation errors and preserve entered text.
+- Upload an optional avatar when editing a user.
+- Display user avatars or a default placeholder image.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Technologies
 
-## Learning Laravel
+- Laravel 12
+- PHP 8.2.12 or a compatible newer version
+- MySQL
+- Blade templates and Eloquent
+- Intervention Image 3 with the GD driver
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Local Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. Download or clone the repository and open a terminal in the
+   folder containing `artisan` and `composer.json`.
 
-## Laravel Sponsors
+2. Install dependencies:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   ```bash
+   composer install
+   ```
 
-### Premium Partners
+3. Copy `.env.example` to `.env`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. Create an empty MySQL database named `laravel_pos_tfa7`.
 
-## Contributing
+5. Configure `.env` for your local database:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   ```env
+   APP_ENV=local
+   APP_DEBUG=true
+   APP_URL=http://127.0.0.1:8000
 
-## Code of Conduct
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=laravel_pos_tfa7
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   Adjust the username and password if your MySQL setup differs.
 
-## Security Vulnerabilities
+6. Enable the GD extension in your PHP configuration.
+   For XAMPP, open `C:\xampp\php\php.ini` and make sure this
+   line has no leading semicolon:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```ini
+   extension=gd
+   ```
 
-## License
+   Restart any running PHP development server after changing it.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. Generate the application key and clear cached configuration:
+
+   ```bash
+   php artisan key:generate
+   php artisan config:clear
+   ```
+
+8. Create the tables and seed sample accounts:
+
+   ```bash
+   php artisan migrate --seed
+   ```
+
+9. Create the public storage link:
+
+   ```bash
+   php artisan storage:link
+   ```
+
+10. Start MySQL, then start the development server:
+
+    ```bash
+    php artisan serve
+    ```
+
+11. Open the address displayed in the terminal.
+
+On Windows with XAMPP, replace `php` with
+`C:\xampp\php\php.exe` if necessary.
+
+## Pages
+
+- `/` — Home
+- `/about` — About
+- `/customers` — Customer Accounts
+- `/customers/create` — Create Customer
+- `/customers/{customer}/edit` — Edit Customer
+- `/users` — User Accounts
+- `/users/create` — Create User
+- `/users/{user}/edit` — Edit User
+
+Replace the values in braces with an existing record ID.
+
+## Avatar Uploads
+
+Upload an avatar through a user's Edit page.
+
+- Accepted formats: JPG, JPEG, PNG, and WebP.
+- Maximum file size: 2 MB.
+- Maximum input dimensions: 4096 × 4096 pixels.
+- Intervention Image prepares a 200 × 200 JPEG thumbnail.
+- Files are stored through `Storage::disk('public')`.
+- Only the relative file path is saved in the `avatar` column.
+- Uploads use generated filenames.
+- Editing without a new upload preserves the current avatar.
+- Replacing an avatar removes the previous image after the
+  database update succeeds.
+- Users without an avatar display a placeholder image.
+
+Uploaded avatars are stored in `storage/app/public/avatars`.
+The local storage link makes them available through `/storage`.
+
+Browsers require users to select the image again after a
+validation error. Text fields retain their entered values.
+
+## Validation Checks
+
+- Required fields cannot be empty.
+- Customer email addresses must be valid.
+- Duplicate usernames are rejected.
+- Users can keep their current username when editing.
+- Invalid or oversized avatar uploads are rejected.
+
+PHP also applies its own upload limits. To let Laravel show its
+2 MB validation message, configure PHP's `upload_max_filesize`
+above 2 MB and `post_max_size` above that upload limit.
+
+## Deployment Notes
+
+- Set production database credentials in the server's `.env`.
+- Set `APP_ENV=production` and `APP_DEBUG=false`.
+- Set `APP_URL` to the hosted website address.
+- Keep `.env` and credentials out of GitHub.
+- Include production Composer dependencies on the server.
+- Ensure the server supports GD and can write to Laravel's
+  storage directories.
+- Configure the web server to serve Laravel's `public` folder.
+- Hosts without symbolic-link support need an alternative
+  configuration for serving public-disk avatar files.
+
+Migrations and seeders are included in the repository.
+Uploaded avatar files must be transferred separately when
+moving a populated database to another server.
